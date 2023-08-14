@@ -1,0 +1,224 @@
+/* Navbar.css */
+.navbar {
+  background-color: #333;
+  color: white;
+  padding: 10px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.navbar-list {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  margin: 0;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.navbar-link:hover {
+  text-decoration: underline;
+}
+
+/* App.css */
+.home-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.add-quick-link-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.add-quick-link-form input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.quick-links {
+  display: flex;
+  flex-direction: column; /* Align quick links in a single column */
+  gap: 5px; /* Gap between quick links */
+  margin-top: 1rem;
+  height: 100vh;
+  overflow: scroll;
+}
+
+.quick-link-button {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: box-shadow 0.3s; /* Add box shadow animation on hover */
+  flex-basis: 80%;
+}
+
+.quick-link-button:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin: 0 2rem;
+}
+
+.todos-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 40%;
+  height: 100vh;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+#task-input,
+#todo-input {
+  width: 100%;
+  height: 2rem;
+  font-size: x-large;
+  padding: 20px;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80vh;
+  overflow: scroll;
+}
+
+.task-box {
+  display: flex;
+  width: 100%;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Add initial box shadow */
+  transition: box-shadow 0.2s ease-in-out, z-index 0.2s ease-in-out; /* Include box-shadow in the transition */
+  z-index: 0;
+}
+
+.task-box:hover {
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3); /* Add larger box shadow on hover */
+  z-index: 1;
+}
+
+.hour-box {
+  display: flex;
+  border: 1px solid;
+  align-items: center;
+}
+
+.task-hour {
+  flex-shrink: 0;
+  margin-right: 1rem;
+}
+
+.schedule {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  min-height: 500px;
+}
+
+.task-icons {
+  display: flex;
+  gap: 20px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.day-schedule {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 60%;
+}
+
+.link-delete-integrate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-trash {
+  cursor: pointer;
+}
+.my-trash:hover {
+  color: red;
+}
+
+.app-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.potd-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid;
+  flex-basis: 60%;
+  height: fit-content;
+}
+
+.potd-html {
+  height: 20rem;
+  overflow: scroll;
+}
+.potd-html img {
+  height: 100px !important;
+  width: 100px !important;
+}
+
+.potd-html > * {
+  font-size: xx-small;
+  word-wrap: break-word;
+}
+.potd-categories {
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+}
+.potd-diff {
+  margin: 0;
+  padding: 0;
+  font-size: xx-small;
+  font-style: italic;
+}
+.potd-categories span {
+  font-weight: 900;
+}
+.footer {
+  font-size: xx-small;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}

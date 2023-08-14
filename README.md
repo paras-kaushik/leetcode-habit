@@ -1,0 +1,2 @@
+- npm install react-dnd react-dnd-html5-backend
+- npm install react-router-dom
