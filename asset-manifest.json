@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/leetcode-habit/static/css/main.3d4095d6.css",
+    "main.js": "/leetcode-habit/static/js/main.9471b454.js",
+    "index.html": "/leetcode-habit/index.html",
+    "main.3d4095d6.css.map": "/leetcode-habit/static/css/main.3d4095d6.css.map",
+    "main.9471b454.js.map": "/leetcode-habit/static/js/main.9471b454.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3d4095d6.css",
+    "static/js/main.9471b454.js"
+  ]
+}

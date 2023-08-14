@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "The Leetcode Habit",
+  "permissions": ["storage"],
+  "author": "Paras",
+  "version": "1.0.1",
+  "description": "Replace new tab screen with Leetcode Problem of the day",
+  "icons": {
+    "16": "darwinFav16.ico",
+    "48": "darwinFav48.ico",
+    "128": "darwinFav128.ico"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  }
+}
