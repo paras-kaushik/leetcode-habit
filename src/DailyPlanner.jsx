@@ -1,13 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import Schedule from './Schedule';
-import { hours, getNextEyePleasingColor, formatDate } from './constants';
+import {
+  hours,
+  getNextEyePleasingColor,
+  formatDate,
+  formatDateHour,
+  findIndexOfHour,
+} from './constants';
 
 const DailyPlanner = ({ tasksByHour, setTasksByHour, currentDateTime }) => {
   // states controlling addition to tasksByHour
+  const currentHour = formatDateHour(currentDateTime);
   const [newTaskName, setNewTaskName] = useState('');
-  const [newTaskHour, setNewTaskHour] = useState('6:00 AM');
+  const [newTaskHour, setNewTaskHour] = useState('12 AM');
 
-  // Rest of the functions (handleTaskDrop, handleNewTaskNameChange, etc.)
+  const handleAddTask = () => {
+    if (newTaskName.trim() !== '') {
+      const randomColor = getNextEyePleasingColor();
+      // schedules task at 12AM by default -it is dragged to appropiiate hour later
+      const updatedTasksByHour = {
+        ...tasksByHour,
+        [newTaskHour]: [
+          ...tasksByHour[newTaskHour],
+          {
+            id: Math.random().toString(),
+            name: newTaskName,
+            isDone: false,
+            color: randomColor,
+          },
+        ],
+      };
+
+      setTasksByHour(updatedTasksByHour); // replcae state with new state
+      //reset inputs
+      setNewTaskName('');
+      setNewTaskHour('12 AM');
+    }
+  };
+
   const handleTaskDrop = (taskId, oldHour, newHour, name) => {
     // Find the task in the old hour's tasks
     const oldTasks = tasksByHour[oldHour];
@@ -31,41 +61,6 @@ const DailyPlanner = ({ tasksByHour, setTasksByHour, currentDateTime }) => {
     }
   };
 
-  const handleNewTaskNameChange = (event) => {
-    setNewTaskName(event.target.value);
-  };
-
-  const handleAddTask = () => {
-    if (newTaskName.trim() !== '') {
-      // Generate a random color (hex code)
-      const randomColor = getNextEyePleasingColor();
-
-      const updatedTasksByHour = {
-        ...tasksByHour,
-        [newTaskHour]: [
-          ...tasksByHour[newTaskHour],
-          {
-            id: Math.random().toString(),
-            name: newTaskName,
-            color: randomColor,
-          },
-        ],
-      };
-
-      setTasksByHour(updatedTasksByHour);
-      setNewTaskName(''); // Clear the input
-      setNewTaskHour('6:00 AM');
-    }
-  };
-
-  const handleTaskDelete = (taskId, hour) => {
-    const updatedTasks = tasksByHour[hour].filter((task) => task.id !== taskId);
-    setTasksByHour({
-      ...tasksByHour,
-      [hour]: updatedTasks,
-    });
-  };
-
   const handleTaskUpdate = (taskId, hour, newName) => {
     const updatedTasks = tasksByHour[hour].map((task) =>
       task.id === taskId ? { ...task, name: newName } : task
@@ -76,7 +71,15 @@ const DailyPlanner = ({ tasksByHour, setTasksByHour, currentDateTime }) => {
     });
   };
 
-  const handleTaskCopy = (id, hour, name, color) => {
+  const handleTaskDelete = (taskId, hour) => {
+    const updatedTasks = tasksByHour[hour].filter((task) => task.id !== taskId);
+    setTasksByHour({
+      ...tasksByHour,
+      [hour]: updatedTasks,
+    });
+  };
+
+  const handleTaskCopy = (id, hour, name, color, done) => {
     // Find the index of the current hour in the hours array
     const currentHourIndex = hours.findIndex((h) => h === hour);
 
@@ -87,7 +90,12 @@ const DailyPlanner = ({ tasksByHour, setTasksByHour, currentDateTime }) => {
         const nextHour = hours[nextEmptyHourIndex];
         if (!tasksByHour[nextHour] || tasksByHour[nextHour].length === 0) {
           // Found an empty hour, copy the task
-          const copiedTask = { id: Math.random().toString(), name, color };
+          const copiedTask = {
+            id: Math.random().toString(),
+            name,
+            color,
+            done,
+          };
           // Update the tasksByHour state
           setTasksByHour((prevTasksByHour) => ({
             ...prevTasksByHour,
@@ -98,6 +106,17 @@ const DailyPlanner = ({ tasksByHour, setTasksByHour, currentDateTime }) => {
         nextEmptyHourIndex++;
       }
     }
+  };
+
+  const handleTaskDone = (id, hour, name, color, done) => {
+    const updatedTasks = tasksByHour[hour].map((task) =>
+      task.id === id ? { ...task, isDone: true } : task
+    );
+
+    setTasksByHour({
+      ...tasksByHour,
+      [hour]: updatedTasks,
+    });
   };
 
   return (
@@ -113,7 +132,9 @@ const DailyPlanner = ({ tasksByHour, setTasksByHour, currentDateTime }) => {
           id="task-input"
           placeholder="Task description"
           value={newTaskName}
-          onChange={handleNewTaskNameChange}
+          onChange={(event) => {
+            setNewTaskName(event.target.value);
+          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               document.querySelector('#task-input').focus();
@@ -143,9 +164,27 @@ const DailyPlanner = ({ tasksByHour, setTasksByHour, currentDateTime }) => {
         handleTaskUpdate={handleTaskUpdate}
         handleTaskDelete={handleTaskDelete}
         handleTaskCopy={handleTaskCopy}
+        handleTaskDone={handleTaskDone}
+        activeHourIndex={findIndexOfHour(currentHour)}
       />
     </div>
   );
 };
 
 export default DailyPlanner;
+
+/**
+ *
+ *  <Schedule
+        hours={hours.filter(
+          (hour, index) => index >= findIndexOfHour(currentHour)
+        )}
+        tasksByHour={tasksByHour}
+        onTaskDrop={handleTaskDrop}
+        handleTaskUpdate={handleTaskUpdate}
+        handleTaskDelete={handleTaskDelete}
+        handleTaskCopy={handleTaskCopy}
+        handleTaskDone={handleTaskDone}
+      />
+ *
+ */

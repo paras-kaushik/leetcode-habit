@@ -1,4 +1,12 @@
 /* Navbar.css */
+#root {
+  background-color: black;
+  color: white;
+  height: 100vh;
+  width: 100vw;
+  overflow: scroll;
+}
+
 .navbar {
   background-color: #333;
   color: white;
@@ -52,10 +60,11 @@
 
 .quick-links {
   display: flex;
-  flex-direction: column; /* Align quick links in a single column */
-  gap: 5px; /* Gap between quick links */
-  margin-top: 1rem;
-  height: 100vh;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1px; /* Gap between quick links */
+  padding: 10px;
+  max-height: 50vh;
   overflow: scroll;
 }
 
@@ -68,6 +77,10 @@
   cursor: pointer;
   transition: box-shadow 0.3s; /* Add box shadow animation on hover */
   flex-basis: 80%;
+  gap: 30px;
+  font-size: xx-small;
+  font-weight: 900;
+  letter-spacing: 1.2px;
 }
 
 .quick-link-button:hover {
@@ -79,6 +92,15 @@
   flex-direction: row;
   gap: 2rem;
   margin: 0 2rem;
+}
+
+.app-container-year {
+  justify-content: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
 }
 
 .todos-container {
@@ -95,6 +117,7 @@
   justify-content: center;
   margin-bottom: 1rem;
   width: 100%;
+  gap: 5px;
 }
 
 #task-input,
@@ -119,6 +142,11 @@
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Add initial box shadow */
   transition: box-shadow 0.2s ease-in-out, z-index 0.2s ease-in-out; /* Include box-shadow in the transition */
   z-index: 0;
+  height: 2px;
+}
+
+.task-box-todo {
+  height: fit-content;
 }
 
 .task-box:hover {
@@ -128,11 +156,12 @@
 
 .hour-box {
   display: flex;
-  border: 1px solid;
+  border: 1px solid black;
   align-items: center;
 }
 
 .task-hour {
+  color: black;
   flex-shrink: 0;
   margin-right: 1rem;
 }
@@ -162,6 +191,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-right: 10px;
 }
 
 .my-trash {
@@ -171,14 +201,6 @@
   color: red;
 }
 
-.app-container {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .potd-container {
   display: flex;
   flex-direction: column;
@@ -186,12 +208,20 @@
   border: 1px solid;
   flex-basis: 60%;
   height: fit-content;
+  padding: 10px;
+}
+
+.potd-title {
+  color: white;
+  font-weight: 900;
+  margin-bottom: 5px;
 }
 
 .potd-html {
-  height: 20rem;
+  height: 60vh;
   overflow: scroll;
 }
+
 .potd-html img {
   height: 100px !important;
   width: 100px !important;
@@ -203,7 +233,7 @@
 }
 .potd-categories {
   display: flex;
-  width: 50%;
+  width: 100%;
   justify-content: space-between;
 }
 .potd-diff {
@@ -215,10 +245,27 @@
 .potd-categories span {
   font-weight: 900;
 }
+
 .footer {
   font-size: xx-small;
   margin-left: auto;
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
+}
+
+.quick-links-container {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 50%;
+  padding: 20px;
+}
+
+.done {
+  background: rgb(238, 174, 202);
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }

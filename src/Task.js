@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDrag } from "react-dnd";
 import { contrastColor } from "./constants";
 
-const Task = ({ task, hour, onDelete, onUpdate, oncopy }) => {
+const Task = ({ task, hour, onDelete, onUpdate, oncopy, onDone }) => {
     const [{ isDragging }, drag] = useDrag({
         type: "task",
         item: { id: task.id, name: task.name, oldHour: hour },
@@ -15,7 +15,11 @@ const Task = ({ task, hour, onDelete, onUpdate, oncopy }) => {
     const [updatedName, setUpdatedName] = useState(task.name);
 
     const handleCopy = () => {
-        oncopy(task.id, hour, task.name, task.color)
+        oncopy(task.id, hour, task.name, task.color, task.done)
+    }
+
+    const handleTaskDone = () => {
+        onDone(task.id, hour, task.name, task.color, task.done);
     }
 
     const handleDelete = () => {
@@ -55,15 +59,20 @@ const Task = ({ task, hour, onDelete, onUpdate, oncopy }) => {
                 <div>{task.name}</div>
             )}
             <div className="task-icons">
-                <i onClick={handleCopy} class="fa-solid fa-clone"></i>
+                {!task.isDone && (<i onClick={handleTaskDone} class="fa-solid fa-check"></i>)}
+                {!task.isDone && (<i onClick={handleCopy} class="fa-solid fa-clone"></i>)}
+
+                {!task.isDone ?
+                    isEditing ? (
+                        <i onClick={handleUpdate} class="fas fa-save" ></i>
+                    ) : (
+                        <i onClick={() => setIsEditing(true)} class="fas fa-edit"></i>
+                    ) : null}
+
                 <i onClick={handleDelete} class="fa fa-trash" aria-hidden="true"></i>
-                {isEditing ? (
-                    <i onClick={handleUpdate} class="fas fa-save"></i>
-                ) : (
-                    <i onClick={() => setIsEditing(true)} class="fas fa-edit"></i>
-                )}
+
             </div>
-        </div>
+        </div >
     );
 };
 

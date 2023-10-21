@@ -17,6 +17,11 @@ const Navbar = () => {
           </Link>
         </li>
         {/* <li className="navbar-item">
+          <Link to="/year" className="navbar-link">
+            Year
+          </Link>
+        </li> */}
+        {/* <li className="navbar-item">
           <Link to="/month" className="navbar-link">
             Month
           </Link>

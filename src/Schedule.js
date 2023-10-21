@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDrop } from "react-dnd";
 import Task from "./Task";
+import { findIndexOfDay } from "./constants";
 
-const Hour = ({ hour, tasks, onTaskDrop, handleTaskUpdate, handleTaskDelete, handleTaskCopy }) => {
+const Hour = ({ hour, tasks, onTaskDrop, handleTaskUpdate, handleTaskDelete, handleTaskCopy, handleTaskDone, isActive }) => {
     const [{ isOver, canDrop }, drop] = useDrop({
         accept: "task",
         drop: (item) => {
@@ -31,7 +32,7 @@ const Hour = ({ hour, tasks, onTaskDrop, handleTaskUpdate, handleTaskDelete, han
             ref={drop}
             style={{
                 height: "4vh", // Adjust the height as needed
-                background: isOver ? "lightgreen" : canDrop ? "lightblue" : "white",
+                background: isActive ? isOver ? "lightgreen" : canDrop ? "lightblue" : "white" : "lightgray",
             }}
         >
             <p className="task-hour">{hour}</p>
@@ -43,26 +44,61 @@ const Hour = ({ hour, tasks, onTaskDrop, handleTaskUpdate, handleTaskDelete, han
                     onUpdate={handleTaskUpdate}
                     onDelete={handleTaskDelete}
                     oncopy={handleTaskCopy}
+                    onDone={handleTaskDone}
                 />
             ))}
         </div>
     );
 };
 
-const Schedule = ({ hours, tasksByHour, onTaskDrop, handleTaskUpdate, handleTaskDelete, handleTaskCopy }) => {
+const Schedule = ({
+    hours,
+    tasksByHour,
+    onTaskDrop,
+    handleTaskUpdate,
+    handleTaskDelete,
+    handleTaskCopy,
+    handleTaskDone,
+    activeHourIndex,
+    isYearSchedule = false
+}) => {
+    const [currentPage, setCurrentPage] = useState(activeHourIndex);
+    const startIndex = currentPage;
+    const endIndex = startIndex + 30;
+    const visibleHours = isYearSchedule? hours.slice(startIndex, endIndex):hours;
     return (
         <div className="schedule">
-            {hours.map((hour) => (
-                <Hour
-                    key={hour}
-                    hour={hour}
-                    tasks={tasksByHour[hour] || []}
-                    onTaskDrop={onTaskDrop}
-                    handleTaskDelete={handleTaskDelete}
-                    handleTaskUpdate={handleTaskUpdate}
-                    handleTaskCopy={handleTaskCopy}
-                />
-            ))}
+            {isYearSchedule && (<div className="pagination">
+                <button
+                    onClick={() => setCurrentPage(Math.max(currentPage - 1, 0))}
+                    disabled={currentPage === 0}
+                >
+                    Previous Days
+                </button>
+                <button
+                    onClick={() =>
+                        setCurrentPage(Math.min(currentPage + 1,364))
+                    }
+                    disabled={currentPage ===364}
+                >
+                    Next Days
+                </button>
+            </div>)}
+            <div className="hour-box-container">
+                {visibleHours.map((hour, index) => (
+                    <Hour
+                        key={hour}
+                        hour={hour}
+                        isActive={!isYearSchedule ? index >= activeHourIndex : findIndexOfDay(hour) >= activeHourIndex}
+                        tasks={tasksByHour[hour] || []}
+                        onTaskDrop={onTaskDrop}
+                        handleTaskDelete={handleTaskDelete}
+                        handleTaskUpdate={handleTaskUpdate}
+                        handleTaskCopy={handleTaskCopy}
+                        handleTaskDone={handleTaskDone}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

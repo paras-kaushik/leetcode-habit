@@ -6,34 +6,32 @@ import { contrastColor, getNextEyePleasingColor } from './constants';
 const TodoList = ({ setTasksByHour }) => {
   const [todos, setTodos] = useState([]);
   const [newTodoName, setNewTodoName] = useState('');
-
-  // Load todos from local storage when the component mounts
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
-  }, []);
-
-  // Save todos to local storage whenever the todos change
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-  // Load todos from chrome.storage.sync when the component mounts
+  const [newTodoPriority, setNewTodoPriority] = useState(3); //Lowest priority by def
 
   // useEffect(() => {
-  //   chrome.storage.sync.get(['todos'], (result) => {
-  //     const storedTodos = result.todos;
-  //     if (storedTodos) {
-  //       setTodos(JSON.parse(storedTodos));
-  //     }
-  //   });
+  //   const storedTodos = localStorage.getItem('todos');
+  //   if (storedTodos) {
+  //     setTodos(JSON.parse(storedTodos));
+  //   }
   // }, []);
 
-  // // Save todos to chrome.storage.sync whenever the todos change
+  // // Save todos to local storage whenever the todos change
   // useEffect(() => {
-  //   chrome.storage.sync.set({ todos: JSON.stringify(todos) });
+  //   localStorage.setItem('todos', JSON.stringify(todos));
   // }, [todos]);
+
+  useEffect(() => {
+    chrome.storage.sync.get(['todos'], (result) => {
+      const storedTodos = result.todos;
+      if (storedTodos) {
+        setTodos(JSON.parse(storedTodos));
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    chrome.storage.sync.set({ todos: JSON.stringify(todos) });
+  }, [todos]);
 
   const handleAddTodo = () => {
     if (newTodoName.trim() !== '') {
@@ -45,6 +43,7 @@ const TodoList = ({ setTasksByHour }) => {
         id: Math.random().toString(),
         name: newTodoName,
         color: randomColor,
+        priority: newTodoPriority,
       };
 
       // Update the todo list state
@@ -62,10 +61,9 @@ const TodoList = ({ setTasksByHour }) => {
   };
 
   const handleScheduleTodo = (todoId, name, color) => {
-    // Move the todo to the first hour ('6:00 AM') in tasksByHour
     setTasksByHour((prevTasksByHour) => ({
       ...prevTasksByHour,
-      '6:00 AM': [...prevTasksByHour['6:00 AM'], { id: todoId, name, color }],
+      '12 AM': [...prevTasksByHour['12 AM'], { id: todoId, name, color }],
     }));
 
     // Remove the todo from the current list
@@ -85,49 +83,69 @@ const TodoList = ({ setTasksByHour }) => {
           onChange={(event) => setNewTodoName(event.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
+              document.querySelector('#todo-priority').focus();
+            }
+          }}
+        />
+        <select
+          type="number"
+          id="todo-priority"
+          placeholder="Todo priority(1-3)"
+          value={newTodoPriority}
+          onChange={(event) => setNewTodoPriority(event.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
               document.querySelector('#todo-input').focus();
               handleAddTodo();
             }
           }}
-        />
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+        </select>
       </div>
       <div className="todo-list">
-        {todos.map((todo) => (
-          <div
-            className="task-box"
-            key={todo.id}
-            style={{
-              width: '80%',
-              padding: '8px',
-              marginBottom: '4px',
-              border: '1px solid',
-              color: contrastColor(todo.color),
-              background: `${todo.color}`,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <div>{todo.name}</div>
-            <div className="task-icons">
-              <i
-                onClick={() => handleDeleteTodo(todo.id)}
-                class="fa fa-trash"
-                aria-hidden="true"
-              ></i>
-              <i
-                class="fa fa-calendar"
-                aria-hidden="true"
-                onClick={() =>
-                  handleScheduleTodo(todo.id, todo.name, todo.color)
-                }
-                style={{
-                  padding: '4px 8px',
-                }}
-              ></i>
+        {todos
+          .sort((a, b) => a.priority - b.priority)
+          .map((todo) => (
+            <div
+              className="task-box task-box-todo"
+              key={todo.id}
+              style={{
+                width: '80%',
+                padding: '8px',
+                marginBottom: '4px',
+                border: '1px solid',
+                color: contrastColor(todo.color),
+                background: `${todo.color}`,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <div>{todo.name}</div>
+
+              <div className="task-icons">
+                <div>{todo.priority}</div>
+                <i
+                  onClick={() => handleDeleteTodo(todo.id)}
+                  class="fa fa-trash"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-calendar"
+                  aria-hidden="true"
+                  onClick={() =>
+                    handleScheduleTodo(todo.id, todo.name, todo.color)
+                  }
+                  style={{
+                    padding: '4px 8px',
+                  }}
+                ></i>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

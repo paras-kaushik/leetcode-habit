@@ -2,37 +2,37 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Potd from './Potd';
+import { contrastColor, eyePleasingColors, getNextEyePleasingColor } from './constants';
 
 const Home = () => {
   const [quickLinks, setQuickLinks] = useState([]);
   const [url, setUrl] = useState('');
   const [alias, setAlias] = useState('');
 
-  useEffect(() => {
-    const storedQuickLinks = localStorage.getItem('quickLinks');
-    if (storedQuickLinks) {
-      setQuickLinks(JSON.parse(storedQuickLinks));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('quickLinks', JSON.stringify(quickLinks));
-  }, [quickLinks]);
-
-  // Load quick links from chrome.storage.sync when the component mounts
   // useEffect(() => {
-  //   chrome.storage.sync.get(['quickLinks'], (result) => {
-  //     const storedQuickLinks = result.quickLinks;
-  //     if (storedQuickLinks) {
-  //       setQuickLinks(JSON.parse(storedQuickLinks));
-  //     }
-  //   });
+  //   const storedQuickLinks = localStorage.getItem('quickLinks');
+  //   if (storedQuickLinks) {
+  //     setQuickLinks(JSON.parse(storedQuickLinks));
+  //   }
   // }, []);
 
-  // // Save quick links to chrome.storage.sync whenever it changes
   // useEffect(() => {
-  //   chrome.storage.sync.set({ quickLinks: JSON.stringify(quickLinks) });
+  //   localStorage.setItem('quickLinks', JSON.stringify(quickLinks));
   // }, [quickLinks]);
+
+  useEffect(() => {
+    chrome.storage.sync.get(['quickLinks'], (result) => {
+      const storedQuickLinks = result.quickLinks;
+      if (storedQuickLinks) {
+        setQuickLinks(JSON.parse(storedQuickLinks));
+      }
+    });
+  }, []);
+
+  // Save quick links to chrome.storage.sync whenever it changes
+  useEffect(() => {
+    chrome.storage.sync.set({ quickLinks: JSON.stringify(quickLinks) });
+  }, [quickLinks]);
 
   const handleAddQuickLink = () => {
     if (url && alias) {
@@ -57,7 +57,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <Potd />
-      <div>
+      <div className="quick-links-container">
         <div className="add-quick-link-form">
           <input
             id="img-url-input"
@@ -89,39 +89,45 @@ const Home = () => {
           />
         </div>
         <div className="quick-links">
-          {quickLinks.map((link, index) => (
-            <div className="link-delete-integrate">
-              <div
-                key={index}
-                onClick={() => window.location.replace(link.url)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="quick-link-button"
-              >
-                <span>{link.alias}</span>
-                <div className="task-icons">
-                  <i
-                    className="fas fa-edit"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const newAlias = prompt('Edit alias:', link.alias);
-                      if (newAlias !== null) {
-                        handleEditQuickLink(index, newAlias);
-                      }
-                    }}
-                  ></i>
+          {quickLinks.map((link, index) => {
+            const len = eyePleasingColors.length;
+            const cardColor = eyePleasingColors[index % len];
+            const textcolor = contrastColor(cardColor);
+            return (
+              <div className="link-delete-integrate">
+                <div
+                  key={index}
+                  onClick={() => window.location.replace(link.url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="quick-link-button"
+                  style={{ backgroundColor: `${cardColor}`,color:textcolor }}
+                >
+                  <span>{link.alias}</span>
+                  <div className="task-icons">
+                    <i
+                      className="fas fa-edit"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newAlias = prompt('Edit alias:', link.alias);
+                        if (newAlias !== null) {
+                          handleEditQuickLink(index, newAlias);
+                        }
+                      }}
+                    ></i>
+                  </div>
                 </div>
+                <i
+                  className="fa-solid fa-x my-trash"
+                  aria-hidden="true"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDeleteQuickLink(index);
+                  }}
+                ></i>
               </div>
-              <i
-                className="fa fa-trash my-trash"
-                aria-hidden="true"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleDeleteQuickLink(index);
-                }}
-              ></i>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
