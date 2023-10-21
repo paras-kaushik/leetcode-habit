@@ -14,29 +14,29 @@ const Dayview = () => {
   const [tasksByHour, setTasksByHour] = useState(initialTasksByHour);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
-  // useEffect(() => {
-  //   const storedTasks = localStorage.getItem('tasksByHour');
-  //   if (storedTasks) {
-  //     setTasksByHour(JSON.parse(storedTasks));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem('tasksByHour', JSON.stringify(tasksByHour));
-  // }, [tasksByHour]);
-
   useEffect(() => {
-    chrome.storage.sync.get(['tasksByHour'], (result) => {
-      const storedTasks = result.tasksByHour;
-      if (storedTasks) {
-        setTasksByHour(JSON.parse(storedTasks));
-      }
-    });
+    const storedTasks = localStorage.getItem('tasksByHour');
+    if (storedTasks) {
+      setTasksByHour(JSON.parse(storedTasks));
+    }
   }, []);
 
   useEffect(() => {
-    chrome.storage.sync.set({ tasksByHour: JSON.stringify(tasksByHour) });
+    localStorage.setItem('tasksByHour', JSON.stringify(tasksByHour));
   }, [tasksByHour]);
+
+  // useEffect(() => {
+  //   chrome.storage.sync.get(['tasksByHour'], (result) => {
+  //     const storedTasks = result.tasksByHour;
+  //     if (storedTasks) {
+  //       setTasksByHour(JSON.parse(storedTasks));
+  //     }
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   chrome.storage.sync.set({ tasksByHour: JSON.stringify(tasksByHour) });
+  // }, [tasksByHour]);
 
   useEffect(() => {
     const updateDateTime = () => {

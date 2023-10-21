@@ -8,30 +8,30 @@ const TodoList = ({ setTasksByHour }) => {
   const [newTodoName, setNewTodoName] = useState('');
   const [newTodoPriority, setNewTodoPriority] = useState(3); //Lowest priority by def
 
-  // useEffect(() => {
-  //   const storedTodos = localStorage.getItem('todos');
-  //   if (storedTodos) {
-  //     setTodos(JSON.parse(storedTodos));
-  //   }
-  // }, []);
-
-  // // Save todos to local storage whenever the todos change
-  // useEffect(() => {
-  //   localStorage.setItem('todos', JSON.stringify(todos));
-  // }, [todos]);
-
   useEffect(() => {
-    chrome.storage.sync.get(['todos'], (result) => {
-      const storedTodos = result.todos;
-      if (storedTodos) {
-        setTodos(JSON.parse(storedTodos));
-      }
-    });
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
   }, []);
 
+  // Save todos to local storage whenever the todos change
   useEffect(() => {
-    chrome.storage.sync.set({ todos: JSON.stringify(todos) });
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
+
+  // useEffect(() => {
+  //   chrome.storage.sync.get(['todos'], (result) => {
+  //     const storedTodos = result.todos;
+  //     if (storedTodos) {
+  //       setTodos(JSON.parse(storedTodos));
+  //     }
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   chrome.storage.sync.set({ todos: JSON.stringify(todos) });
+  // }, [todos]);
 
   const handleAddTodo = () => {
     if (newTodoName.trim() !== '') {

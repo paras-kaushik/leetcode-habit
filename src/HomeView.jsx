@@ -9,30 +9,30 @@ const Home = () => {
   const [url, setUrl] = useState('');
   const [alias, setAlias] = useState('');
 
-  // useEffect(() => {
-  //   const storedQuickLinks = localStorage.getItem('quickLinks');
-  //   if (storedQuickLinks) {
-  //     setQuickLinks(JSON.parse(storedQuickLinks));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem('quickLinks', JSON.stringify(quickLinks));
-  // }, [quickLinks]);
-
   useEffect(() => {
-    chrome.storage.sync.get(['quickLinks'], (result) => {
-      const storedQuickLinks = result.quickLinks;
-      if (storedQuickLinks) {
-        setQuickLinks(JSON.parse(storedQuickLinks));
-      }
-    });
+    const storedQuickLinks = localStorage.getItem('quickLinks');
+    if (storedQuickLinks) {
+      setQuickLinks(JSON.parse(storedQuickLinks));
+    }
   }, []);
 
-  // Save quick links to chrome.storage.sync whenever it changes
   useEffect(() => {
-    chrome.storage.sync.set({ quickLinks: JSON.stringify(quickLinks) });
+    localStorage.setItem('quickLinks', JSON.stringify(quickLinks));
   }, [quickLinks]);
+
+  // useEffect(() => {
+  //   chrome.storage.sync.get(['quickLinks'], (result) => {
+  //     const storedQuickLinks = result.quickLinks;
+  //     if (storedQuickLinks) {
+  //       setQuickLinks(JSON.parse(storedQuickLinks));
+  //     }
+  //   });
+  // }, []);
+
+  // // Save quick links to chrome.storage.sync whenever it changes
+  // useEffect(() => {
+  //   chrome.storage.sync.set({ quickLinks: JSON.stringify(quickLinks) });
+  // }, [quickLinks]);
 
   const handleAddQuickLink = () => {
     if (url && alias) {
