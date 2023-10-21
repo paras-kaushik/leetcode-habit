@@ -1,8 +1,15 @@
 # Atomic Habit Chrome Extension
-
+## DEMO LINK
+- https://paras-kaushik.github.io/leetcode-habit/
 ## Introduction
 The Atomic Habit Chrome Extension is a powerful tool designed to help you build positive daily routines and improve your productivity. It draws inspiration from the book "Atomic Habits" by James Clear, which explores the concept of habit formation and provides actionable insights on behavior change. This extension is built around the principles of habit-building discussed in the book. In addition, it incorporates the practice of timeboxing, a technique favored by numerous successful individuals, to enhance your daily routine.
-
+## Features
+1. **Problem of the Day**: This extension fetches the "Problem of the Day" and displays it on your new tab page, serving as your cue to initiate your daily habits.
+2. **Quick Links**: The app has quick links which can be used for speedy navigation
+![](./images/2023-10-21-19-36-28.png)
+3. **Daily Scheduler**: The second tab of this extension provides a daily scheduler, helping you implement the laws of habit-building and timeboxing by allocating time for tasks and rewarding your progress.
+4. **Todos Manager**: A central Place to manage all your todos
+![](./images/2023-10-21-19-38-34.png)
 ## The Laws of Habit Building
 James Clear identifies several fundamental laws for building and maintaining habits:
 
@@ -25,10 +32,6 @@ Timeboxing is a time management technique where you allocate specific blocks of 
 
 - **Accountability**: It holds you accountable for the tasks you set out to accomplish within a specified time frame.
 
-## Features
-1. **Problem of the Day**: This extension fetches the "Problem of the Day" and displays it on your new tab page, serving as your cue to initiate your daily habits.
-
-2. **Daily Scheduler**: The second tab of this extension provides a daily scheduler, helping you implement the laws of habit-building and timeboxing by allocating time for tasks and rewarding your progress.
 
 ## Installation
 To use this extension, follow these steps:
